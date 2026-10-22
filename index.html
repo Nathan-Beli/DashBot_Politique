@@ -1,436 +1,547 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en" class="dark scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DashBot - Bot Discord Multi-fonctions</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=GG+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>DashBot — Next-Gen Multi-Function Discord Bot</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        discord: {
+                            blurple: '#5865F2',
+                            blurpleHover: '#4752C4',
+                            dark: '#0E1015',
+                            card: '#161822',
+                            sidebar: '#1E202E',
+                            muted: '#949BA4',
+                            accent: '#7289DA',
+                            glow: '#8A2BE2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-color: #5865F2;
-            --brand-color-hover: #4752C4;
-            --bg-dark: #1E1F22;
-            --bg-card: #2B2D31;
-            --bg-nav: #111214;
-            --text-main: #F2F3F5;
-            --text-muted: #949BA4;
-            --accent-green: #23A55A;
-            --border-color: #35363C;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            background-color: #0E1015;
+            color: #F2F3F5;
+            overflow-x: hidden;
         }
 
-        /* Header Navigation */
-        header {
-            background-color: var(--bg-nav);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        /* Glassmorphism Effect */
+        .glass-panel {
+            background: rgba(22, 24, 34, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .glass-card {
+            background: rgba(30, 32, 46, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 700;
-            font-size: 1.25rem;
+        .glass-card:hover {
+            border-color: rgba(88, 101, 242, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(88, 101, 242, 0.3);
         }
 
-        .logo-container img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: var(--brand-color);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-main);
-        }
-
-        /* Hero Section */
-        .hero {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .hero img.bot-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 4px solid var(--brand-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .hero h1 {
-            font-size: 2.75rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            max-width: 650px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1.75rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background-color 0.2s, transform 0.1s;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary {
-            background-color: var(--brand-color);
-            color: #FFFFFF;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--brand-color-hover);
-        }
-
-        .btn-secondary {
-            background-color: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--border-color);
-        }
-
-        /* Main Content Container */
-        main {
-            max-width: 1000px;
-            margin: 0 auto 4rem auto;
-            padding: 0 2rem;
-            width: 100%;
-            flex: 1;
-        }
-
-        /* Features Cards */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            padding: 1.75rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .card h3 {
-            margin-bottom: 0.75rem;
-            color: var(--brand-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* Legal Section styling */
-        .legal-section {
-            background-color: var(--bg-card);
-            padding: 2.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-top: 2rem;
+        /* SPA Tab Display Controls */
+        .tab-content {
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
 
-        .legal-section.active {
+        .tab-content.active {
             display: block;
+            opacity: 1;
         }
 
-        .legal-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border-color);
+        /* Active Navigation Link */
+        .nav-link.active {
+            color: #FFFFFF !important;
+            border-bottom: 2px solid #5865F2;
         }
 
-        .legal-section h3 {
-            font-size: 1.2rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--brand-color);
+        /* Text Gradient Effect */
+        .text-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 50%, #5865F2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .legal-section p, .legal-section ul {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
+        /* Background Animated Glows */
+        .glow-sphere-1 {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(88, 101, 242, 0.25) 0%, rgba(138, 43, 226, 0.1) 40%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .legal-section ul {
-            padding-left: 1.5rem;
-        }
-
-        .legal-section li {
-            margin-bottom: 0.3rem;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--bg-nav);
-            border-top: 1px solid var(--border-color);
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: auto;
-        }
-
-        footer a {
-            color: var(--brand-color);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 600px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
+        .glow-sphere-2 {
+            position: absolute;
+            top: 600px;
+            right: -100px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(114, 137, 218, 0.15) 0%, transparent 70%);
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-discord-blurple selection:text-white">
 
-    <!-- Header / Navigation -->
-    <header>
-        <nav>
-            <a href="#" class="logo-container" onclick="showSection('home')">
-                <img src="logo.png" alt="DashBot Logo" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                <span>DashBot</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#home" id="nav-home" class="active" onclick="showSection('home')">Accueil</a></li>
-                <li><a href="#tos" id="nav-tos" onclick="showSection('tos')">Conditions</a></li>
-                <li><a href="#privacy" id="nav-privacy" onclick="showSection('privacy')">Confidentialité</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- Ambient Glowing Background Effect -->
+    <div class="glow-sphere-1"></div>
+    <div class="glow-sphere-2"></div>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Home Section -->
-        <div id="section-home">
-            <section class="hero">
-                <img src="logo.png" alt="DashBot Avatar" class="bot-avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                <h1>Gérez votre serveur avec DashBot</h1>
-                <p>Un bot Discord multi-fonctions intégrant une auto-modération puissante, un système de tickets d'assistance complet et des outils d'administration pour votre communauté.</p>
-                <div class="hero-buttons">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1562957552918986773&permissions=8&integration_type=0&scope=bot" class="btn btn-primary" target="_blank">Ajouter à Discord</a>
-                    <a href="#tos" class="btn btn-secondary" onclick="showSection('tos')">Consulter les Conditions</a>
+    <!-- Sticky Glass Navigation Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Brand Name -->
+                <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('home')">
+                    <div class="relative">
+                        <img src="logo.png" alt="DashBot Logo" class="w-11 h-11 rounded-2xl object-cover shadow-lg shadow-discord-blurple/30 group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='https://cdn.discordapp.com/embed/avatars/0.png';">
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-discord-dark rounded-full"></span>
+                    </div>
+                    <span class="text-2xl font-black tracking-tight text-white group-hover:text-discord-blurple transition">DashBot</span>
                 </div>
-            </section>
 
-            <div class="features-grid">
-                <div class="card">
-                    <h3>🛡️ Auto-Modération</h3>
-                    <p>Filtrage automatique des messages malveillants, gestion des spams et règles sur-mesure pour maintenir un serveur propre et sécurisé 24/7.</p>
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-8 text-sm font-semibold text-discord-muted">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-link hover:text-white transition py-2 active">Home</button>
+                    <button onclick="switchTab('home'); scrollToFeatures();" id="nav-features" class="nav-link hover:text-white transition py-2">Features</button>
+                    <button onclick="switchTab('tos')" id="nav-tos" class="nav-link hover:text-white transition py-2">Terms of Service</button>
+                    <button onclick="switchTab('privacy')" id="nav-privacy" class="nav-link hover:text-white transition py-2">Privacy Policy</button>
+                </nav>
+
+                <!-- Primary CTA Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1562957552918986773&permissions=8&integration_type=0&scope=bot" 
+                       target="_blank" rel="noopener noreferrer" 
+                       class="bg-discord-blurple hover:bg-discord-blurpleHover text-white px-5 py-2.5 rounded-xl font-bold text-sm transition duration-300 shadow-lg shadow-discord-blurple/30 hover:shadow-discord-blurple/50 flex items-center space-x-2.5 transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                        <span>Add to Discord</span>
+                    </a>
                 </div>
-                <div class="card">
-                    <h3>🎫 Système de Tickets</h3>
-                    <p>Permettez à vos membres d'ouvrir des tickets de support privés directement avec votre équipe d'administration de manière simple et organisée.</p>
-                </div>
-                <div class="card">
-                    <h3>⚙️ Gestion Communautaire</h3>
-                    <p>Outils d'utilitaire, gestion des rôles, logs de modération et commandes d'administration personnalisables selon vos besoins.</p>
+
+                <!-- Mobile Navigation Toggle -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-discord-muted hover:text-white focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl" id="menu-icon"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Terms of Service Section -->
-        <div id="section-tos" class="legal-section">
-            <h2>Conditions d'Utilisation (Terms of Service)</h2>
-            <p><em>Dernière mise à jour : 22 octobre 2026</em></p>
-            <p>En ajoutant ou en utilisant <strong>DashBot</strong> (ci-après désigné "le Bot") sur votre serveur Discord, vous acceptez d'être lié par les présentes Conditions d'Utilisation.</p>
-
-            <h3>1. Description du Service</h3>
-            <p>DashBot est une application Discord multi-fonctions fournissant des outils de modération automatique, un système de gestion de tickets d'assistance et divers utilitaires pour serveurs Discord.</p>
-
-            <h3>2. Conditions d'Utilisation et Règles</h3>
-            <p>En utilisant le Bot, vous vous engagez à :</p>
-            <ul>
-                <li>Respecter l'ensemble des <a href="https://discord.com/terms" target="_blank">Conditions d'Utilisation de Discord</a> et de la <a href="https://discord.com/guidelines" target="_blank">Charte de la Communauté Discord</a>.</li>
-                <li>Ne pas exploiter de bugs ou vulnérabilités du Bot pour nuire à d'autres utilisateurs ou serveurs.</li>
-                <li>Ne pas tenter d'inonder (spam) ou de perturber les services du Bot.</li>
-            </ul>
-
-            <h3>3. Disponibilité du Service</h3>
-            <p>Le Bot est fourni "en l'état" et "selon disponibilité". L'équipe de développement se réserve le droit de modifier, suspendre ou interrompre tout ou partie des fonctionnalités du Bot à tout moment pour maintenance ou mises à jour.</p>
-
-            <h3>4. Responsabilité</h3>
-            <p>Les développeurs ne pourront être tenus responsables des pertes de données, interruptions de service ou mauvaises configurations faites par les administrateurs sur leurs propres serveurs.</p>
-
-            <h3>5. Contact</h3>
-            <p>Pour toute question concernant ces conditions, vous pouvez contacter le développeur : <strong>Nathan Béliveau</strong> (nathan.beliveau@outlook.com).</p>
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-white/10 px-4 pt-3 pb-5 space-y-3">
+            <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-base font-semibold text-discord-muted hover:text-white hover:bg-white/5">Home</button>
+            <button onclick="switchTab('home'); scrollToFeatures(); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-base font-semibold text-discord-muted hover:text-white hover:bg-white/5">Features</button>
+            <button onclick="switchTab('tos'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-base font-semibold text-discord-muted hover:text-white hover:bg-white/5">Terms of Service</button>
+            <button onclick="switchTab('privacy'); toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-base font-semibold text-discord-muted hover:text-white hover:bg-white/5">Privacy Policy</button>
+            <a href="https://discord.com/oauth2/authorize?client_id=1562957552918986773&permissions=8&integration_type=0&scope=bot" 
+               target="_blank" rel="noopener noreferrer" 
+               class="block w-full text-center mt-3 bg-discord-blurple hover:bg-discord-blurpleHover text-white px-5 py-3 rounded-xl font-bold text-sm transition shadow-lg shadow-discord-blurple/30">
+                <i class="fa-brands fa-discord mr-2"></i>Add to Discord
+            </a>
         </div>
+    </header>
 
-        <!-- Privacy Policy Section -->
-        <div id="section-privacy" class="legal-section">
-            <h2>Politique de Confidentialité (Privacy Policy)</h2>
-            <p><em>Effective Date: October 22, 2026</em></p>
+    <!-- Main Content Area -->
+    <main class="flex-grow z-10 relative">
 
-            <h3>1. Introduction</h3>
-            <p>This Privacy Policy explains how Nathan Béliveau ("we", "us", or "our") handles data in connection with the DashBot application ("the App") on Discord. By adding or using the App, you agree to the processing of information in accordance with this policy.</p>
+        <!-- ================= TAB 1: HOME ================= -->
+        <section id="tab-home" class="tab-content active">
+            
+            <!-- Hero Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 text-center">
+                
+                <!-- Animated Badge -->
+                <div class="inline-flex items-center space-x-2 bg-discord-blurple/10 border border-discord-blurple/30 px-4 py-2 rounded-full text-indigo-300 text-xs font-bold uppercase tracking-wider mb-8 shadow-inner animate-pulse-slow">
+                    <span class="flex h-2 w-2 rounded-full bg-discord-blurple"></span>
+                    <span>⚡ Next-Gen Discord Management</span>
+                </div>
 
-            <h3>2. Information We Process</h3>
-            <p>To function properly, the App processes minimal data provided via the Discord API, which may include:</p>
-            <ul>
-                <li><strong>Discord User IDs and Usernames:</strong> Required to manage support tickets and moderation logs.</li>
-                <li><strong>Server/Guild IDs and Channel IDs:</strong> Required to store server-specific configurations and permissions.</li>
-                <li><strong>Message Content:</strong> Processed in real-time strictly for auto-moderation filters and ticket channel management.</li>
-            </ul>
+                <!-- Big Bold Headline -->
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight max-w-5xl mx-auto leading-tight sm:leading-none mb-8">
+                    Supercharge Your Discord Server with <span class="text-gradient">DashBot</span>
+                </h1>
 
-            <h3>3. How We Use Your Information</h3>
-            <p>We use the collected information solely to :</p>
-            <ul>
-                <li>Provide support ticket services within your Discord server.</li>
-                <li>Execute auto-moderation rules configured by server administrators.</li>
-                <li>Save server configuration settings.</li>
-            </ul>
+                <!-- Subtitle -->
+                <p class="text-lg sm:text-xl text-discord-muted max-w-3xl mx-auto font-normal leading-relaxed mb-12">
+                    The ultimate multi-function Discord bot offering advanced auto-moderation, automated support ticketing, and powerful community management tools.
+                </p>
 
-            <h3>4. Data Sharing and Security</h3>
-            <p>We do not sell, trade, or rent any user data to third parties. All data processed relies on Discord's secure infrastructure.</p>
+                <!-- Call To Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-5">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1562957552918986773&permissions=8&integration_type=0&scope=bot" 
+                       target="_blank" rel="noopener noreferrer" 
+                       class="w-full sm:w-auto bg-discord-blurple hover:bg-discord-blurpleHover text-white px-9 py-4 rounded-xl font-bold text-base transition duration-300 shadow-xl shadow-discord-blurple/30 hover:shadow-discord-blurple/50 flex items-center justify-center space-x-3 transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                        <span>Add to Discord</span>
+                    </a>
+                    <button onclick="switchTab('tos')" 
+                            class="w-full sm:w-auto glass-panel hover:bg-white/10 text-white border border-white/10 px-8 py-4 rounded-xl font-bold text-base transition duration-300 flex items-center justify-center space-x-2.5">
+                        <i class="fa-solid fa-file-contract text-discord-muted"></i>
+                        <span>View Terms</span>
+                    </button>
+                </div>
 
-            <h3>5. Data Retention & Deletion</h3>
-            <p>Server administrators can request the deletion of their stored configuration data or ticket logs at any time by removing the bot from their server or by contacting us directly.</p>
+                <!-- Live Performance Stats Bar -->
+                <div class="mt-20 pt-10 border-t border-white/10 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-black text-white mb-1">99.9%</div>
+                        <div class="text-xs uppercase font-bold tracking-wider text-discord-muted">Uptime Guarantee</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-black text-white mb-1">Instant</div>
+                        <div class="text-xs uppercase font-bold tracking-wider text-discord-muted">Ticket Support</div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="text-3xl font-black text-white mb-1">Zero-Lag</div>
+                        <div class="text-xs uppercase font-bold tracking-wider text-discord-muted">Auto-Moderation</div>
+                    </div>
+                </div>
+            </div>
 
-            <h3>6. Contact Us</h3>
-            <p>If you have any questions or requests regarding this Privacy Policy, please contact:</p>
-            <ul>
-                <li><strong>Developer:</strong> Nathan Béliveau</li>
-                <li><strong>Email:</strong> nathan.beliveau@outlook.com</li>
-            </ul>
-        </div>
+            <!-- Features Showcase Grid -->
+            <div id="features-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Designed for Modern Communities</h2>
+                    <p class="text-discord-muted text-base sm:text-lg mt-4 max-w-2xl mx-auto">
+                        Everything you need to run, protect, and scale your Discord server seamlessly.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Feature Card 1 -->
+                    <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">Smart Auto-Moderation</h3>
+                            <p class="text-discord-muted text-sm leading-relaxed">
+                                Real-time chat filtering, anti-spam mechanisms, link protection, and automated sanctions to keep your server safe around the clock.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature Card 2 -->
+                    <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-discord-blurple/10 text-discord-blurple border border-discord-blurple/20 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                                <i class="fa-solid fa-ticket"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">Advanced Support Tickets</h3>
+                            <p class="text-discord-muted text-sm leading-relaxed">
+                                Private ticket channels for seamless member support, customizable categories, and automated transcript management.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature Card 3 -->
+                    <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-green-500/10 text-green-400 border border-green-500/20 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                                <i class="fa-solid fa-sliders"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">Community Tools</h3>
+                            <p class="text-discord-muted text-sm leading-relaxed">
+                                Complete role administration, custom welcome messages, server event logs, and utility commands to power up engagement.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature Card 4 -->
+                    <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">High Performance</h3>
+                            <p class="text-discord-muted text-sm leading-relaxed">
+                                Built for speed and ultra-low latency. Enjoy 24/7 high reliability with instantaneous command execution across servers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: TERMS OF SERVICE ================= -->
+        <section id="tab-tos" class="tab-content">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-white/10 shadow-2xl">
+                    
+                    <!-- Section Header -->
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <div class="inline-block bg-discord-blurple/20 text-discord-blurple text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md mb-3">Legal Document</div>
+                        <h1 class="text-3xl sm:text-4xl font-black text-white">Terms of Service</h1>
+                        <p class="text-sm text-discord-muted mt-2">
+                            Effective Date: October 22, 2026 &bull; Developer: Nathan Béliveau
+                        </p>
+                    </div>
+
+                    <!-- Legal Text Body -->
+                    <div class="space-y-8 text-discord-muted leading-relaxed text-sm sm:text-base">
+                        <p class="text-white font-medium">
+                            By inviting or using <strong class="text-discord-blurple">DashBot</strong> (hereinafter referred to as "the App") in your Discord server, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use or invite the App.
+                        </p>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">1.</span> Service Description
+                            </h2>
+                            <p>
+                                DashBot is a multi-function Discord application providing server management utilities, including real-time auto-moderation filtering, private support ticketing channels, and administrative tools for server managers.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">2.</span> Acceptable Use & Conduct
+                            </h2>
+                            <p>By utilizing DashBot, you explicitly agree to:</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1.5 pl-2">
+                                <li>Comply with Discord's official <a href="https://discord.com/terms" target="_blank" class="text-discord-blurple hover:underline">Terms of Service</a> and <a href="https://discord.com/guidelines" target="_blank" class="text-discord-blurple hover:underline">Community Guidelines</a>.</li>
+                                <li>Not exploit bugs, glitches, or security flaws in the App to harm other servers or users.</li>
+                                <li>Not attempt to flood, spam, overload, or reverse-engineer the App's infrastructure.</li>
+                                <li>Not use the App to facilitate illegal activities or harassment.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">3.</span> Availability & Service Updates
+                            </h2>
+                            <p>
+                                The App is provided on an "AS IS" and "AS AVAILABLE" basis. The developer reserves the right to modify, update, pause, or terminate any feature or service at any time without prior notice for maintenance or feature upgrades.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">4.</span> Limitation of Liability
+                            </h2>
+                            <p>
+                                Under no circumstances shall Nathan Béliveau be liable for any data loss, service interruption, or automated moderation actions taken by the Bot within your Discord server. Server owners remain responsible for configuring the App's settings and permissions.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">5.</span> Contact & Support
+                            </h2>
+                            <p>
+                                For inquiries, bug reports, or support regarding DashBot, please contact:<br>
+                                <strong class="text-white">Developer:</strong> Nathan Béliveau<br>
+                                <strong class="text-white">Email:</strong> <a href="mailto:nathan.beliveau@outlook.com" class="text-discord-blurple hover:underline">nathan.beliveau@outlook.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: PRIVACY POLICY ================= -->
+        <section id="tab-privacy" class="tab-content">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-white/10 shadow-2xl">
+                    
+                    <!-- Section Header -->
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <div class="inline-block bg-discord-blurple/20 text-discord-blurple text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md mb-3">Privacy & Safety</div>
+                        <h1 class="text-3xl sm:text-4xl font-black text-white">Privacy Policy</h1>
+                        <p class="text-sm text-discord-muted mt-2">
+                            Effective Date: October 22, 2026 &bull; Developer: Nathan Béliveau
+                        </p>
+                    </div>
+
+                    <!-- Policy Text Body -->
+                    <div class="space-y-8 text-discord-muted leading-relaxed text-sm sm:text-base">
+                        <p class="text-white font-medium">
+                            This Privacy Policy explains how <strong class="text-discord-blurple">DashBot</strong> collects, processes, and protects data when operating on Discord.
+                        </p>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">1.</span> Data We Process
+                            </h2>
+                            <p>
+                                To deliver its features, the App processes minimal data provided via the official Discord API, including:
+                            </p>
+                            <ul class="list-disc list-inside mt-2 space-y-1.5 pl-2">
+                                ><strong class="text-white">Discord Identifiers (IDs):</strong> User IDs, Server (Guild) IDs, and Channel IDs to manage tickets and server configurations.</li>
+                                <li><strong class="text-white">Message Content:</strong> Processed in real-time strictly for auto-moderation filtering and support ticket channel routing.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">2.</span> How We Use Data
+                            </h2>
+                            <p>Processed data is used solely to:</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1.5 pl-2">
+                                <li>Execute auto-moderation rules set by server administrators.</li>
+                                <li>Facilitate support ticket creation and management.</li>
+                                <li>Save server-specific settings and preferences.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">3.</span> Data Protection & Sharing
+                            </h2>
+                            <p>
+                                We do not sell, rent, trade, or share user data with third parties. All data transmission relies on Discord's encrypted infrastructure.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">4.</span> Data Retention & Removal
+                            </h2>
+                            <p>
+                                Server settings are retained only as long as the Bot remains on your server. Server administrators can request complete data removal by removing the Bot or contacting the developer directly.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">5.</span> Children's Privacy
+                            </h2>
+                            <p>
+                                DashBot adheres to Discord's Terms of Service and is not directed at users under the age of 13 (or applicable legal age in your jurisdiction).
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-discord-blurple">6.</span> Contact Us
+                            </h2>
+                            <p>
+                                For any questions or data requests regarding this Privacy Policy, please contact:<br>
+                                <strong class="text-white">Developer:</strong> Nathan Béliveau<br>
+                                <strong class="text-white">Email:</strong> <a href="mailto:nathan.beliveau@outlook.com" class="text-discord-blurple hover:underline">nathan.beliveau@outlook.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 DashBot — Développé par Nathan Béliveau.</p>
-        <p style="margin-top: 0.5rem;">
-            <a href="#tos" onclick="showSection('tos')">Conditions d'Utilisation</a> | 
-            <a href="#privacy" onclick="showSection('privacy')">Politique de Confidentialité</a>
-        </p>
+    <footer class="glass-panel border-t border-white/10 py-10 mt-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+                
+                <!-- Brand Info -->
+                <div class="flex items-center space-x-3">
+                    <img src="logo.png" alt="DashBot Logo" class="w-8 h-8 rounded-lg object-cover" onerror="this.onerror=null; this.src='https://cdn.discordapp.com/embed/avatars/0.png';">
+                    <span class="text-base font-extrabold text-white">DashBot</span>
+                </div>
+
+                <!-- Copyright -->
+                <div class="text-xs text-discord-muted text-center">
+                    &copy; 2026 DashBot. Developed by <span class="text-white font-semibold">Nathan Béliveau</span>. All rights reserved.
+                </div>
+
+                <!-- Footer Quick Links -->
+                <div class="flex space-x-6 text-xs font-semibold text-discord-muted">
+                    <button onclick="switchTab('home')" class="hover:text-white transition">Home</button>
+                    <button onclick="switchTab('tos')" class="hover:text-white transition">Terms of Service</button>
+                    <button onclick="switchTab('privacy')" class="hover:text-white transition">Privacy Policy</button>
+                </div>
+            </div>
+        </div>
     </footer>
 
-    <!-- JavaScript Navigation -->
+    <!-- SPA Logic Script -->
     <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            document.getElementById('section-home').style.display = 'none';
-            document.getElementById('section-tos').classList.remove('active');
-            document.getElementById('section-privacy').classList.remove('active');
+        function switchTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-            // Remove active class from nav links
-            document.getElementById('nav-home').classList.remove('active');
-            document.getElementById('nav-tos').classList.remove('active');
-            document.getElementById('nav-privacy').classList.remove('active');
-
-            // Show selected section
-            if (sectionId === 'home') {
-                document.getElementById('section-home').style.display = 'block';
-                document.getElementById('nav-home').classList.add('active');
-            } else if (sectionId === 'tos') {
-                document.getElementById('section-tos').classList.add('active');
-                document.getElementById('nav-tos').classList.add('active');
-            } else if (sectionId === 'privacy') {
-                document.getElementById('section-privacy').classList.add('active');
-                document.getElementById('nav-privacy').classList.add('active');
+            // Show selected tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
             }
-            
+
+            // Reset navigation active link status
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+
+            // Scroll smoothly to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Handle URL hashes directly (e.g. #tos or #privacy)
+        function scrollToFeatures() {
+            setTimeout(() => {
+                const elem = document.getElementById('features-section');
+                if (elem) {
+                    elem.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Handle direct URL Hash navigation (e.g., #tos or #privacy)
         window.addEventListener('load', () => {
             const hash = window.location.hash.replace('#', '');
             if (hash === 'tos' || hash === 'privacy') {
-                showSection(hash);
+                switchTab(hash);
             }
         });
     </script>
