@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashBot — Bot Discord Multi-Fonctions</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        discord: {
+                            bg: '#313338',
+                            sidebar: '#2B2D31',
+                            card: '#1E1F22',
+                            blurple: '#5865F2',
+                            blurpleHover: '#4752C4',
+                            green: '#23A55A',
+                            text: '#F2F3F5',
+                            muted: '#949BA4'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #313338;
+            color: #F2F3F5;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .active-nav-link {
+            color: #FFFFFF !important;
+            border-bottom: 2px solid #5865F2;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-discord-blurple selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-discord-sidebar/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-10 h-10 rounded-xl bg-discord-blurple flex items-center justify-center text-white shadow-lg shadow-discord-blurple/20">
+                        <i class="fa-solid fa-robot text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-white">DashBot</span>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-8 text-sm font-medium text-discord-muted">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn hover:text-white transition py-2 active-nav-link">Accueil</button>
+                    <button onclick="switchTab('terms')" id="nav-terms" class="nav-btn hover:text-white transition py-2">Conditions d'Utilisation</button>
+                    <button onclick="switchTab('privacy')" id="nav-privacy" class="nav-btn hover:text-white transition py-2">Politique de Confidentialité</button>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="bg-discord-blurple hover:bg-discord-blurpleHover text-white px-4 py-2 rounded-lg font-medium text-sm transition duration-200 shadow-md shadow-discord-blurple/20 flex items-center space-x-2">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Ajouter à Discord</span>
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-discord-muted hover:text-white focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-discord-sidebar border-b border-white/5 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-discord-muted hover:text-white hover:bg-discord-card">Accueil</button>
+            <button onclick="switchTab('terms'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-discord-muted hover:text-white hover:bg-discord-card">Conditions d'Utilisation</button>
+            <button onclick="switchTab('privacy'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-discord-muted hover:text-white hover:bg-discord-card">Politique de Confidentialité</button>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="block w-full text-center mt-3 bg-discord-blurple hover:bg-discord-blurpleHover text-white px-4 py-2 rounded-lg font-medium text-sm transition">
+                <i class="fa-brands fa-discord mr-2"></i>Ajouter à Discord
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+
+        <!-- TAB 1: HOME SECTION -->
+        <section id="tab-home" class="tab-content active">
+            <!-- Hero Banner -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 text-center">
+                <div class="inline-flex items-center space-x-2 bg-discord-blurple/10 border border-discord-blurple/30 px-3 py-1.5 rounded-full text-discord-blurple text-xs font-semibold uppercase tracking-wider mb-6">
+                    <i class="fa-solid fa-sparkles"></i>
+                    <span>Bot Multi-Fonctions Moderne</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+                    DashBot — Le bot Discord ultime pour votre communauté
+                </h1>
+                <p class="mt-6 text-lg sm:text-xl text-discord-muted max-w-2xl mx-auto">
+                    Simplifiez la gestion de votre serveur avec une auto-modération puissante, un système de tickets complet et des outils d'administration efficaces.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto bg-discord-blurple hover:bg-discord-blurpleHover text-white px-8 py-3.5 rounded-xl font-semibold text-base transition shadow-lg shadow-discord-blurple/30 flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                        <span>Ajouter à Discord</span>
+                    </a>
+                    <button onclick="switchTab('terms')" class="w-full sm:w-auto bg-discord-sidebar hover:bg-discord-card text-white border border-white/10 px-8 py-3.5 rounded-xl font-semibold text-base transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-file-contract text-discord-muted"></i>
+                        <span>Consulter les Politiques</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Features Cards Showcase -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-white/5">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white">Fonctionnalités Clés</h2>
+                    <p class="text-discord-muted mt-2">Tout ce dont votre serveur a besoin dans une seule application.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-discord-sidebar p-8 rounded-2xl border border-white/5 hover:border-discord-blurple/40 transition duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-6">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Auto-Modération</h3>
+                        <p class="text-discord-muted text-sm leading-relaxed">
+                            Protégez votre serveur 24/7 grâce au filtrage automatique des liens, du spam, des insultes et des mentions abusives.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-discord-sidebar p-8 rounded-2xl border border-white/5 hover:border-discord-blurple/40 transition duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-discord-blurple/10 text-discord-blurple flex items-center justify-center text-xl mb-6">
+                            <i class="fa-solid fa-ticket"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Système de Tickets</h3>
+                        <p class="text-discord-muted text-sm leading-relaxed">
+                            Proposez un support fluide à vos membres. Ouverture de salons privés en un clic pour vos demandes d'assistance ou réclamations.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-discord-sidebar p-8 rounded-2xl border border-white/5 hover:border-discord-blurple/40 transition duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/10 text-discord-green flex items-center justify-center text-xl mb-6">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Outils de Gestion</h3>
+                        <p class="text-discord-muted text-sm leading-relaxed">
+                            Gérez facilement les rôles, affichez des journaux d'événements (logs) détaillés et profitez d'utilitaires pratiques pour vos membres.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: TERMS OF SERVICE SECTION -->
+        <section id="tab-terms" class="tab-content">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-discord-sidebar p-8 sm:p-12 rounded-2xl border border-white/5">
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <h1 class="text-3xl font-extrabold text-white">Conditions d'Utilisation</h1>
+                        <p class="text-sm text-discord-muted mt-2">
+                            <strong>Date d'effet :</strong> 22 octobre 2026 &bull; <strong>Développeur :</strong> Nathan Béliveau
+                        </p>
+                    </div>
+
+                    <div class="space-y-8 text-discord-muted leading-relaxed text-sm sm:text-base">
+                        <p>
+                            En ajoutant ou en utilisant <strong class="text-white">DashBot</strong> (ci-après désigné "le Bot") sur votre serveur Discord, vous acceptez d'être lié par les présentes Conditions d'Utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas installer ni utiliser le Bot.
+                        </p>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">1. Description du Service</h2>
+                            <p>
+                                DashBot est une application multi-fonctions hébergée sur Discord. Elle propose divers services d'administration et d'animation, incluant :
+                            </p>
+                            <ul class="list-disc list-inside mt-2 space-y-1 pl-2">
+                                <li>L'auto-modération et le filtrage automatique de contenu.</li>
+                                <li>La création et la gestion de tickets de support.</li>
+                                <li>Des outils d'administration de rôles et des utilitaires divers.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">2. Conditions et Règles d'Utilisation</h2>
+                            <p>En utilisant DashBot, vous vous engagez à :</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1 pl-2">
+                                <li>Respecter les <a href="https://discord.com/terms" target="_blank" class="text-discord-blurple hover:underline">Conditions d'Utilisation de Discord</a> et les directives de la communauté.</li>
+                                <li>Ne pas tenter d'exploiter des failles ou bugs pour perturber le fonctionnement du Bot.</li>
+                                <li>Ne pas spammer ni surcharger l'infrastructure du Bot.</li>
+                                <li>Ne pas utiliser le Bot à des fins illégales ou malveillantes.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">3. Disponibilité du Service</h2>
+                            <p>
+                                Le Bot est fourni "en l'état" et "selon disponibilité". Le développeur se réserve le droit de modifier, suspendre ou interrompre temporairement ou définitivement le service (pour maintenance, mises à jour ou raisons techniques) sans préavis.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">4. Limite de Responsabilité</h2>
+                            <p>
+                                Nathan Béliveau ne pourra être tenu responsable des pertes de données, interruptions de service ou sanctions administratives appliquées par erreur par les modules de modération automatique sur votre serveur.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">5. Résiliation et Accès</h2>
+                            <p>
+                                Nous nous réservons le droit d'interdire l'accès au Bot (mise sur liste noire) à tout utilisateur ou serveur ne respectant pas les présentes conditions.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">6. Contact</h2>
+                            <p>
+                                Pour toute question concernant ces Conditions d'Utilisation, vous pouvez nous contacter à :<br>
+                                <a href="mailto:nathan.beliveau@outlook.com" class="text-discord-blurple hover:underline font-semibold">nathan.beliveau@outlook.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PRIVACY POLICY SECTION -->
+        <section id="tab-privacy" class="tab-content">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-discord-sidebar p-8 sm:p-12 rounded-2xl border border-white/5">
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <h1 class="text-3xl font-extrabold text-white">Politique de Confidentialité</h1>
+                        <p class="text-sm text-discord-muted mt-2">
+                            <strong>Date d'effet :</strong> 22 octobre 2026 &bull; <strong>Développeur :</strong> Nathan Béliveau
+                        </p>
+                    </div>
+
+                    <div class="space-y-8 text-discord-muted leading-relaxed text-sm sm:text-base">
+                        <p>
+                            La présente Politique de Confidentialité explique comment <strong class="text-white">DashBot</strong> collecte, utilise et protège les données lors de son fonctionnement sur la plateforme Discord.
+                        </p>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">1. Données collectées</h2>
+                            <p>
+                                Pour fonctionner correctement, le Bot traite uniquement les informations minimales nécessaires fournies via l'API officielle de Discord :
+                            </p>
+                            <ul class="list-disc list-inside mt-2 space-y-1 pl-2">
+                                <li><strong class="text-white">Identifiants Discord (IDs) :</strong> ID d'utilisateur, ID de serveur (Guild ID) et ID de salon afin de gérer les configurations et les tickets.</li>
+                                <li><strong class="text-white">Contenu des messages :</strong> Traité temporairement pour l'auto-modération (détection de liens interdits/spam) et pour la création de tickets de support.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">2. Utilisation des données</h2>
+                            <p>Les données collectées sont strictement utilisées pour :</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1 pl-2">
+                                <li>Assurer le fonctionnement du système de support par ticket.</li>
+                                <li>Appliquer les règles d'auto-modération configurées par les administrateurs du serveur.</li>
+                                <li>Conserver les paramètres de configuration propres à chaque serveur.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">3. Partage et Stockage des données</h2>
+                            <ul class="list-disc list-inside space-y-1 pl-2">
+                                <li><strong class="text-white">Aucune vente :</strong> Vos données ne sont jamais vendues, louées ou cédées à des tiers.</li>
+                                <li><strong class="text-white">Sécurité :</strong> Les données sont conservées de manière sécurisée et restreinte.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">4. Conservation et Suppression</h2>
+                            <p>
+                                Les données de configuration sont conservées tant que le Bot est présent sur votre serveur. Si le Bot est retiré du serveur, les administrateurs peuvent contacter le développeur pour demander la suppression complète des données enregistrées.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">5. Protection des mineurs</h2>
+                            <p>
+                                Conformément aux règles de Discord, l'utilisation de DashBot est réservée aux personnes âgées d'au moins 13 ans (ou l'âge légal dans votre pays).
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold text-white mb-2">6. Contact & Droits</h2>
+                            <p>
+                                Si vous souhaitez consulter, modifier ou demander la suppression des données enregistrées concernant votre serveur, contactez :<br>
+                                <strong class="text-white">Nathan Béliveau</strong> — <a href="mailto:nathan.beliveau@outlook.com" class="text-discord-blurple hover:underline">nathan.beliveau@outlook.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-discord-card border-t border-white/5 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-7 h-7 rounded-lg bg-discord-blurple flex items-center justify-center text-white text-xs font-bold">
+                        DB
+                    </div>
+                    <span class="text-sm font-semibold text-white">DashBot</span>
+                </div>
+
+                <div class="text-xs text-discord-muted text-center">
+                    &copy; 2026 DashBot. Tous droits réservés. Développé par <span class="text-white font-medium">Nathan Béliveau</span>.
+                </div>
+
+                <div class="flex space-x-6 text-xs text-discord-muted">
+                    <button onclick="switchTab('terms')" class="hover:text-white transition">Conditions</button>
+                    <button onclick="switchTab('privacy')" class="hover:text-white transition">Confidentialité</button>
+                    <a href="mailto:nathan.beliveau@outlook.com" class="hover:text-white transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tab Switching Script -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show current tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            // Update nav active states
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active-nav-link'));
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.add('active-nav-link');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
